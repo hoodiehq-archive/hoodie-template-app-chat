@@ -2,6 +2,9 @@
 // initialize Hoodie
 var hoodie  = new Hoodie();
 
+// create a scoped 'message' store for easier re-use
+var messageStore = hoodie.store('message');
+
 // Select the chat form
 var chatForm = $('[data-action="chat-input"]');
 
@@ -12,6 +15,7 @@ var chatBox = $('[data-action="send-message"]');
 chatBox.on('keydown', checkSubmit);
 
 function checkSubmit(e) {
+  // if the CMD/Ctrl key and the Enter key are both pressed down, then send the message to the store
   if (e.metaKey && e.keyCode === 13) {
     sendMessage(e);
   }
@@ -38,8 +42,10 @@ function sendMessage(e) {
   // create a new message model
   var message = new messageModel(messageContent);
 
-  hoodie.store.add(message.type, message.props).publish();
+  // using the global messageStore, add this message object and publish it to the global store.
+  messageStore.add(message).publish();
 
+  // Dont't forget to clear out the charBox
   chatBox.val('');
 }
 
@@ -49,12 +55,9 @@ function messageModel(message) {
   var postDate = new Date();
 
   return {
-    'type': 'message',
-    'props': {
-      'user': user,
-      'date': postDate,
-      'message': message
-    }
+    'user': user,
+    'date': postDate,
+    'message': message
   };
 }
 
@@ -80,6 +83,10 @@ function streamMessage(message) {
   // finally, insert template into the chat stream
   // then, clear out the chat box
   messageTemplate.appendTo(chatStream);
-  messageTemplate[0].scrollIntoViewIfNeeded();
+
+  // scroll the new message into view if it overflows the chat stream
+  if (messageTemplate[0].offsetTop > messageTemplate[0].parentNode.offsetHeight) {
+    messageTemplate[0].scrollIntoView();
+  }
 }
 
