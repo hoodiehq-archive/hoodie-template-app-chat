@@ -1,0 +1,89 @@
+/* ==========================================================================
+   Hoodie Sign In / Sign Up / Sign out stylings
+   ========================================================================== */
+
+body {
+  font-family: "Roboto","Arial", sans-serif;
+}
+
+.container {
+  background: #fff;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.no-resize { resize: none; }
+
+/* ----- your content ----- */
+.content {
+  padding: 10px;
+  width: 480px;
+  margin: 0 auto;
+}
+
+h1,
+h3,
+h4 {
+  color: #38afda;
+}
+
+.bg-teal {
+  background-color: #38afda;
+}
+
+
+/* ----- welcome msg + SignOut Button ----- */
+#account {
+  text-align: right;
+  margin-right: 15px;
+}
+
+#account p {
+  display: inline-block;
+  margin-right: 8px;
+}
+
+#account button {
+  border: 1px solid #38afda;
+  color: #38afda;
+  background-color: #fff;
+  font-size: 14px;
+  padding: 8px 12px 9px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* ------ login overlay ----- */
+#login {
+  position: absolute;
+  background-color: #fff;
+  top: 0;
+  bottom:0;
+  width: 99%;
+  z-index: 6996;
+}
+
+#login form {
+  position: absolute;
+  background-color: #fff;
+  z-index: 6999;
+  width:300px;
+  height:150px;
+  top: 30%;
+  left: 40%;
+}
+  #login input {
+    display: block;
+    width: 100%;
+    line-height: 20px;
+    margin-top: 10px;
+
+  }
+
+
+/* ------ chat app area ----- */
+
+.chat-stream-container {
+  height: 20rem;
+}

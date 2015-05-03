@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Hoodie Boilerplate</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" href="assets/css/basscss.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+  </head>
+  <body>
+    <div class="container">
+<!-- ======================== login =============================== -->
+      <section id="account" class="mt2">
+        <p>Hello <span id="userName"></span>!</p>
+        <button id="signOut">Sign out</button>
+      </section>
+
+      <section id="login" style="display:none;">
+        <form id="loginform">
+          <h3>Login</h3>
+          <input type="text" id="user" value="" autofocus />
+          <input type="password" id="pwd" value="" autofocus />
+          <input type="submit" />
+        </form>
+      </section> 
+<!-- ======================== add content here =============================== -->
+      <section class="content">
+        <header>
+          <h1>Hoodie Chat</h1>
+          <h3>The perfect way to converse with Hoodies, worldwide.</h3>
+        </header>
+
+        <section>
+          <div class="border px2 py1 overflow-scroll chat-stream-container" data-action="chat-stream"></div>
+          <form data-action="chat-input">
+            <div class="mt2 mb1">
+              <textarea class="block full-width my1 field-light not-rounded no-resize" rows="1" placeholder="Type message here..." data-action="send-message"></textarea>
+            </div>
+            <input class="button bg-teal full-width" type="submit" value="Send Message">
+          </form>
+        </section>
+
+        <footer>
+         <h4>Enjoy Hoodie!</h4>
+        </footer>
+      </section>
+    </div> <!-- /.container -->
+
+<!-- ======================== end content =============================== -->
+    <script src="/assets/vendor/jquery-2.1.0.min.js"></script>
+
+    <!-- Load the dynamic version of hoodie.js that includes all the plugin code-->
+    <script src="/_api/_files/hoodie.js"></script>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/account.js"></script>
+  </body>
+</html>
