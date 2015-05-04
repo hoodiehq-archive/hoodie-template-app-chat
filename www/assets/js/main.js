@@ -61,18 +61,32 @@ function messageModel(message) {
   };
 }
 
+// create a notification model for re-use later
+function notifyModel(notification, status) {
+  var postDate = new Date();
+
+  return {
+    'date': postDate,
+    'notification': notification,
+    'status': status
+  };
+}
+
 // setup event listener for new messages being saved to Hoodie
 hoodie.global.on('add', streamMessage);
 
 // post newly added message to the stream
 function streamMessage(message) {
+  if(message.notification) { return streamNotification(message); }
+
   if (message.type !== 'message') { return; }
+
   var date = new Date(message.date);
   
   // create template to store message content
   var messageTemplate = $('<div></div>');
   var messageUser = $('<h4 class="inline-block mr1">'+message.user+'</h4>');
-  var messageDate = $('<span class="inline-block h6 regular">'+date.toLocaleTimeString()+'</span>');
+  var messageDate = $('<span class="inline-block h6 regular muted">'+date.toLocaleTimeString()+'</span>');
   var messageContent = $('<p>'+message.message+'</p>');
 
   // insert data into template
@@ -85,8 +99,44 @@ function streamMessage(message) {
   messageTemplate.appendTo(chatStream);
 
   // scroll the new message into view if it overflows the chat stream
-  if (messageTemplate[0].offsetTop > messageTemplate[0].parentNode.offsetHeight) {
-    messageTemplate[0].scrollIntoView();
-  }
+  scrollIntoViewIfNeeded(messageTemplate[0]);
 }
 
+function notifySignIn(e) {
+  var notification = e + " has signed into the chat.";
+  var model = new notifyModel(notification, 'green');
+
+  messageStore.add(model).publish();
+}
+
+function notifySignOut(e) {
+  var notification = e + " has signed out or disconnected.";
+  var model = new notifyModel(notification, 'red');
+
+  messageStore.add(model).publish();
+}
+
+function streamNotification(notification) {
+  var date = new Date(notification.date);
+
+  // create template for notification
+  var notifyTemplate = $('<div></div>');
+  var notifyContent = $('<h5 class="inline-block mr1 '+notification.status+'">'+notification.notification+'</h5>');
+  var notifyDate = $('<span class="inline-block h6 regular muted">'+date.toLocaleTimeString()+'</span>');
+
+  // insert data into template
+  notifyTemplate.append(notifyContent);
+  notifyTemplate.append(notifyDate);
+
+  // insert template into chat stream
+  notifyTemplate.appendTo(chatStream);
+
+  // scroll the notification into view if it overflows the chat stream
+  scrollIntoViewIfNeeded(notifyTemplate[0]);
+}
+
+function scrollIntoViewIfNeeded(element) {
+  if (element.offsetTop > element.parentNode.offsetHeight) {
+    element.scrollIntoView();
+  }
+}

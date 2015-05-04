@@ -6,14 +6,14 @@ var login = $("#login");
 var loginform = $("#loginform");
 
 function loginHide(){
-	login.hide();
-	$('#userName').html(hoodie.account.username);
+  login.hide();
+  $('#userName').html(hoodie.account.username);
 }
 
 if(hoodie.account.username == undefined)  {
-	login.show();
+  login.show();
 } else {
-	loginHide();
+  loginHide();
 };
 
 $('#loginform').submit(function (event) {
@@ -23,33 +23,35 @@ $('#loginform').submit(function (event) {
 
   hoodie.account.signIn(username, password)
   .done(
-  	function(){
-  		loginHide();
-  	}
+    function(){
+      loginHide();
+    }
   ).fail(
-		function(){
-  			hoodie.account.signUp(username, password, password)
-			  .done(
-			  	function(){
-			  		loginHide();
-			  	}
-			  ).fail(
-					function(){
-			  			console.log('fail');
-			  		}
-			  );
-  		}
+  function(){
+    hoodie.account.signUp(username, password, password)
+    .done(
+      function(){
+        loginHide();
+      }
+    ).fail(
+    function(){
+      console.log('fail');
+    }
+    );
+  }
   );
-  
+
 });
-hoodie.account.on('error:unauthenticated signout', function(){
-	login.show();
+hoodie.account.on('error:unauthenticated signout', function(e){
+  login.show();
+  notifySignOut(e);
 });
 
-hoodie.account.on('signin signup', function(){
-	login.hide();
+hoodie.account.on('signin signup', function(e){
+  login.hide();
+  notifySignIn(e);
 });
 
 $('#signOut').click(function(){
-	hoodie.account.signOut();
+  hoodie.account.signOut();
 });
