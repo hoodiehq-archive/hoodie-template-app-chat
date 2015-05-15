@@ -2,8 +2,16 @@
 // initialize Hoodie
 var hoodie  = new Hoodie();
 
+// replace currentUser avatar data with the current username, if there is one, then fetch the real avatar.
+if ( hoodie.account.username ) {
+  $('[data-avatar="currentUser"]').attr('data-avatar', hoodie.account.username);
+  fetchAvatar();
+}
+
 // create a scoped 'message' store for easier re-use
 var messageStore = hoodie.store('message');
+
+var avatarStore = hoodie.store('avatar');
 
 // Select the chat form
 var chatForm = $('[data-action="chat-input"]');
@@ -44,6 +52,7 @@ function sendMessage(e) {
 
   // using the global messageStore, add this message object and publish it to the global store.
   messageStore.add(message).publish();
+  hoodie.remote.push();
 
   // Dont't forget to clear out the charBox
   chatBox.val('');
@@ -72,6 +81,61 @@ function notifyModel(notification, status) {
   };
 }
 
+function saveAvatar(props) {
+  hoodie.store.updateOrAdd('avatar', hoodie.account.username, props).publish().then(function(avatar) {
+    var avatarEl = $('[data-avatar="'+avatar[0].id+'"]');
+    avatarEl[0].src = avatar[0].src;
+  })
+  .catch(function(error) { console.log(error); })
+
+}
+
+// create an avatar for re-use later
+function avatarProcess(imgData) {
+  function handleImg(img) {
+    return function process(e) {
+      var src = e.target.result;
+      var props = {
+        src: src,
+        id: hoodie.account.username
+      };
+
+      saveAvatar(props);
+    };
+  }
+
+  var reader = new FileReader();
+  reader.onload = handleImg(imgData);
+  reader.readAsDataURL(imgData);
+}
+
+function fetchAvatar(user) {
+  var user = user || hoodie.account.username;
+  var imgEl = $('[data-avatar="'+user+'"]');
+  
+  hoodie.global.find('avatar', user)
+    .then(function(avatar) { console.log(avatar, $('[data-avatar="'+avatar.id+'"]')); imgEl.attr('src', avatar.src); })
+    .catch(function(error) { console.log(user, error); return; });
+}
+
+$('.user-avatar').on('click', showFileInput);
+
+function showFileInput(e) {
+  var parent = $('#account');
+  var fileInput = $('<input type="file" accept="image/png, image/jpeg, image/gif" data-action="uploadAvatar" />');
+  var inputContainer = $('<div class="bg-white input-container"></div>');
+
+  fileInput.on('change', handleImgUpload);
+
+  inputContainer.append(fileInput);
+  parent.prepend(inputContainer);
+}
+
+function handleImgUpload(e) {
+  avatarProcess(e.target.files[0]);
+  e.target.remove();
+}
+
 // setup event listener for new messages being saved to Hoodie
 hoodie.global.on('add', streamMessage);
 
@@ -82,21 +146,29 @@ function streamMessage(message) {
   if (message.type !== 'message') { return; }
 
   var date = new Date(message.date);
+  var bgColor = message.user === hoodie.account.username ? "bg-silver" : "bg-white";
   
   // create template to store message content
-  var messageTemplate = $('<div></div>');
-  var messageUser = $('<h4 class="inline-block mr1">'+message.user+'</h4>');
+  var messageTemplate = $('<div class="p1 '+bgColor+' flex flex-stretch"></div>');
+  var messageAvatar = $('<aside class="flex flex-stretch rounded overflow-hidden mr2"><img src="http://placekitten.com/g/50/50" width="50px" height="50px" data-avatar="'+message.user+'" /></aside>');
+  var messageContentContainer = $('<div></div>');
+  var messageUser = $('<h4 class="inline-block mt0 mr1">'+message.user+'</h4>');
   var messageDate = $('<span class="inline-block h6 regular muted">'+date.toLocaleTimeString()+'</span>');
-  var messageContent = $('<p>'+message.message+'</p>');
+  var messageContent = $('<p class="mb0">'+message.message+'</p>');
 
   // insert data into template
-  messageTemplate.append(messageUser);
-  messageTemplate.append(messageDate);
-  messageTemplate.append(messageContent);
+  messageTemplate.append(messageAvatar);
+  messageContentContainer.append(messageUser);
+  messageContentContainer.append(messageDate);
+  messageContentContainer.append(messageContent);
+  messageTemplate.append(messageContentContainer);
 
   // finally, insert template into the chat stream
   // then, clear out the chat box
   messageTemplate.appendTo(chatStream);
+
+  // start async proces of fetching the avatar for this user
+  fetchAvatar(message.user);
 
   // scroll the new message into view if it overflows the chat stream
   scrollIntoViewIfNeeded(messageTemplate[0]);
@@ -120,7 +192,7 @@ function streamNotification(notification) {
   var date = new Date(notification.date);
 
   // create template for notification
-  var notifyTemplate = $('<div></div>');
+  var notifyTemplate = $('<div class="px1"></div>');
   var notifyContent = $('<h5 class="inline-block mr1 '+notification.status+'">'+notification.notification+'</h5>');
   var notifyDate = $('<span class="inline-block h6 regular muted">'+date.toLocaleTimeString()+'</span>');
 

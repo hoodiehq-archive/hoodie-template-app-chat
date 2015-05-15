@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Hoodie Boilerplate</title>
+    <title>HoodieChat</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
 
@@ -13,8 +13,11 @@
   <body>
     <div class="container">
 <!-- ======================== login =============================== -->
-      <section id="account" class="mt2">
-        <p>Hello <span id="userName"></span>!</p>
+      <section id="account" class="mt2 flex flex-right flex-center">
+        <div class="user-avatar relative">
+          <img src="http://placekitten.com/g/50/50" data-avatar="currentUser" width="50px" height="50px" class="mr1 rounded relative row-3" />
+        </div>
+        <p class="m0" >Hello <span id="userName"></span>!</p>
         <button id="signOut">Sign out</button>
       </section>
 
@@ -34,7 +37,7 @@
         </header>
 
         <section>
-          <div class="border px2 py1 overflow-scroll chat-stream-container" data-action="chat-stream"></div>
+          <div class="border overflow-scroll chat-stream-container" data-action="chat-stream"></div>
           <form data-action="chat-input">
             <div class="mt2 mb1">
               <textarea class="block full-width my1 field-light not-rounded no-resize" rows="1" placeholder="Type message here..." data-action="send-message"></textarea>
