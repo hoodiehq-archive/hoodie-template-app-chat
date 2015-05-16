@@ -19,6 +19,9 @@ var chatForm = $('[data-action="chat-input"]');
 // Select the textarea from the chat form
 var chatBox = $('[data-action="send-message"]');
 
+// Select the chat stream area
+var chatStream = $('[data-action="chat-stream"]');
+
 // Setup keydown listener for power user message submitting, CMD/Ctrl + Enter
 chatBox.on('keydown', checkSubmit);
 
@@ -28,9 +31,6 @@ function checkSubmit(e) {
     sendMessage(e);
   }
 }
-
-// Select the chat stream area
-var chatStream = $('[data-action="chat-stream"]');
 
 // Setup submit event listener on chat form
 chatForm.on('submit', sendMessage);
@@ -52,6 +52,8 @@ function sendMessage(e) {
 
   // using the global messageStore, add this message object and publish it to the global store.
   messageStore.add(message).publish();
+
+  // trigger an immediate sync with the server
   hoodie.remote.push();
 
   // Dont't forget to clear out the charBox
@@ -81,13 +83,22 @@ function notifyModel(notification, status) {
   };
 }
 
-function saveAvatar(props) {
-  hoodie.store.updateOrAdd('avatar', hoodie.account.username, props).publish().then(function(avatar) {
-    var avatarEl = $('[data-avatar="'+avatar[0].id+'"]');
-    avatarEl[0].src = avatar[0].src;
-  })
-  .catch(function(error) { console.log(error); })
+$('.user-avatar').on('click', showFileInput);
 
+function showFileInput(e) {
+  var parent = $('#account');
+  var fileInput = $('<input type="file" accept="image/png, image/jpeg, image/gif" data-action="uploadAvatar" />');
+  var inputContainer = $('<div class="bg-white input-container"></div>');
+
+  fileInput.on('change', handleImgUpload);
+
+  inputContainer.append(fileInput);
+  parent.prepend(inputContainer);
+}
+
+function handleImgUpload(e) {
+  avatarProcess(e.target.files[0]);
+  e.target.remove();
 }
 
 // create an avatar for re-use later
@@ -109,31 +120,22 @@ function avatarProcess(imgData) {
   reader.readAsDataURL(imgData);
 }
 
+function saveAvatar(props) {
+  hoodie.store.updateOrAdd('avatar', hoodie.account.username, props).publish().then(function(avatar) {
+    var avatarEl = $('[data-avatar="'+avatar[0].id+'"]');
+    avatarEl[0].src = avatar[0].src;
+  })
+  .catch(function(error) { console.log(error); })
+
+}
+
 function fetchAvatar(user) {
   var user = user || hoodie.account.username;
   var imgEl = $('[data-avatar="'+user+'"]');
   
   hoodie.global.find('avatar', user)
-    .then(function(avatar) { console.log(avatar, $('[data-avatar="'+avatar.id+'"]')); imgEl.attr('src', avatar.src); })
+    .then(function(avatar) { imgEl.attr('src', avatar.src); })
     .catch(function(error) { console.log(user, error); return; });
-}
-
-$('.user-avatar').on('click', showFileInput);
-
-function showFileInput(e) {
-  var parent = $('#account');
-  var fileInput = $('<input type="file" accept="image/png, image/jpeg, image/gif" data-action="uploadAvatar" />');
-  var inputContainer = $('<div class="bg-white input-container"></div>');
-
-  fileInput.on('change', handleImgUpload);
-
-  inputContainer.append(fileInput);
-  parent.prepend(inputContainer);
-}
-
-function handleImgUpload(e) {
-  avatarProcess(e.target.files[0]);
-  e.target.remove();
 }
 
 // setup event listener for new messages being saved to Hoodie
