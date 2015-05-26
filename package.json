@@ -1,0 +1,38 @@
+{
+  "name": "hoodieChat",
+  "version": "2.0.0",
+  "type": "app",
+  "dependencies": {
+    "basscss": "^6.0.2",
+    "hoodie-plugin-appconfig": ">=2.0.1",
+    "hoodie-plugin-email": ">=1.0.0",
+    "hoodie-plugin-global-share": "^3.0.0",
+    "hoodie-plugin-users": ">=2.1.0",
+    "hoodie-server": ">=2.0.0"
+  },
+  "files": [
+    "www/"
+  ],
+  "engines": {
+    "node": ">=0.10.22"
+  },
+  "scripts": {
+    "start": "node node_modules/hoodie-server/bin/start"
+  },
+  "hoodie": {
+    "plugins": [
+      "hoodie-plugin-appconfig",
+      "hoodie-plugin-email",
+      "hoodie-plugin-users",
+      "hoodie-plugin-global-share"
+    ]
+  },
+  "gitHead": "71bfcc2717da10750003c26cb50d747a993951df",
+  "readme": "# Boilerplate for new Hoodie App\n\nYou can start to build your app in a fingersnap.\n\n\n## Installation\n\n`$ hoodie new appName -t \"zoepage/hoodie-boilerplate\" `\n\n\n## Including\n\n+ jQuery-1.9.1\n+ Bootstrap 3\n\nindex.html\n+ hoodie-accountbar (SignIn / SignOut)\n+ including all (css + js) files you need\n\nmain.css \n\nmain.js\n+ init hoodie",
+  "readmeFilename": "README.md",
+  "description": "You can start to build your app in a fingersnap.",
+  "_id": "hoodie-boilerplate@2.0.0",
+  "_shasum": "cb7fae2fe2b6f0cfb7638a95ea187b9ae0d22932",
+  "_from": "zoepage/hoodie-boilerplate",
+  "_resolved": "git://github.com/zoepage/hoodie-boilerplate.git#71bfcc2717da10750003c26cb50d747a993951df"
+}
