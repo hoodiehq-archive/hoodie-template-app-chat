@@ -20,7 +20,7 @@ Includes the following functionality:
 How to start
 ------------
 
-Create a new Hoodie app your local environment with:
+Create a new Hoodie app in your local environment with:
 ```shell
 $ hoodie new chatApp -t "hoodiehq/hoodie-template-app-chat"
 ```
