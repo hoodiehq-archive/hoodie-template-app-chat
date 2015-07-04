@@ -56,7 +56,7 @@ function sendMessage(e) {
   // trigger an immediate sync with the server
   hoodie.remote.push();
 
-  // Dont't forget to clear out the charBox
+  // Dont't forget to clear out the chatBox
   chatBox.val('');
 }
 
@@ -169,7 +169,7 @@ function streamMessage(message) {
   // then, clear out the chat box
   messageTemplate.appendTo(chatStream);
 
-  // start async proces of fetching the avatar for this user
+  // start async process of fetching the avatar for this user
   fetchAvatar(message.user);
 
   // scroll the new message into view if it overflows the chat stream
