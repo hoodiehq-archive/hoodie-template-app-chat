@@ -152,7 +152,7 @@ function streamMessage(message) {
   
   // create template to store message content
   var messageTemplate = $('<div class="p1 '+bgColor+' flex flex-stretch"></div>');
-  var messageAvatar = $('<aside class="flex flex-stretch rounded overflow-hidden mr2"><img src="http://placekitten.com/g/50/50" width="50px" height="50px" data-avatar="'+message.user+'" /></aside>');
+  var messageAvatar = $('<aside class="flex flex-stretch rounded overflow-hidden mr2"><img src="http://placekitten.com/g/50/50" width="50px" height="50px" data-avatar="'+message.user+'" alt="'+message.user+'\'s avatar"/></aside>');
   var messageContentContainer = $('<div></div>');
   var messageUser = $('<h4 class="inline-block mt0 mr1">'+message.user+'</h4>');
   var messageDate = $('<span class="inline-block h6 regular muted">'+date.toLocaleTimeString()+'</span>');
