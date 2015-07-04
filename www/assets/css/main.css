@@ -111,14 +111,13 @@ h4 {
   top: 30%;
   left: 40%;
 }
-  #login input {
-    display: block;
-    width: 100%;
-    line-height: 20px;
-    margin-top: 10px;
 
-  }
-
+#login input {
+  display: block;
+  width: 100%;
+  line-height: 20px;
+  margin-top: 10px;
+}
 
 /* ------ chat app area ----- */
 
