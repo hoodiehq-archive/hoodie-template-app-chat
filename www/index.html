@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js">
+<html lang="en" class="no-js">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -15,7 +15,7 @@
 <!-- ======================== login =============================== -->
       <section id="account" class="mt2 flex flex-right flex-center">
         <div class="user-avatar relative">
-          <img src="http://placekitten.com/g/50/50" data-avatar="currentUser" width="50px" height="50px" class="mr1 rounded relative row-3" />
+          <img src="http://placekitten.com/g/50/50" data-avatar="currentUser" width="50px" height="50px" class="mr1 rounded relative row-3" alt="your avatar"/>
         </div>
         <p class="m0" >Hello <span id="userName"></span>!</p>
         <button id="signOut">Sign out</button>
@@ -24,7 +24,9 @@
       <section id="login" style="display:none;">
         <form id="loginform">
           <h3>Login</h3>
+          <label for="user">Username</label>
           <input type="text" id="user" value="" autofocus />
+          <label for="password">Password</label>
           <input type="password" id="pwd" value="" autofocus />
           <input type="submit" />
         </form>
@@ -46,7 +48,7 @@
           </form>
         </section>
 
-        <footer>
+        <footer role="contentinfo">
          <h4>Enjoy Hoodie!</h4>
         </footer>
       </section>
